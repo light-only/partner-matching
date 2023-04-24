@@ -1,6 +1,6 @@
 <template>
+
   <BasicLayout></BasicLayout>
-<!--    <HelloWorld msg="Vite + Vue" />-->
 </template>
 
 
