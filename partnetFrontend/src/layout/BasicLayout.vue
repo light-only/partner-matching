@@ -30,7 +30,7 @@
 import {ref} from 'vue'
 import {showToast} from "vant";
 import router from "../router";
-const onClickLeft = () => router.push('/');
+const onClickLeft = () => router.back();
 const onClickRight = () => router.push('/search');
 
 const onChange=(index)=>showToast(`标签${index}`);
