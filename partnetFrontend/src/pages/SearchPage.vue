@@ -22,12 +22,16 @@
       v-model:main-active-index="activeIndex"
       :items="tagList"
   />
+  <div style="padding: 16px">
+    <van-button type="primary" block @click="doSearchResult">搜索</van-button>
+  </div>
 
 </template>
 
 <script setup>
   import { ref } from 'vue';
   import { showToast } from 'vant';
+  import router from '../router/index'
 
   const activeIds = ref([]);
   const show = ref(true);
@@ -39,6 +43,17 @@
       const tempParentTag = {...parentTag};
       tempParentTag.children = tempChildren.filter(item=>item.text.includes(searchValue.value));
       return tempParentTag;
+    })
+  }
+  /**
+   * 搜索按钮
+   */
+  const doSearchResult = ()=>{
+    router.push({
+      path:'/user/list',
+      query:{
+        tags:activeIds.value
+      }
     })
   }
   const onCancel = () => {

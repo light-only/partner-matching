@@ -17,6 +17,9 @@
 
 <script setup lang="ts">
 import router from '../router/index'
+import {onMounted} from "vue";
+import myAxios from "../plugins/myAxios";
+import {showFailToast, showSuccessToast, showToast} from "vant";
 const user = {
   id:1,
   username:'张三',

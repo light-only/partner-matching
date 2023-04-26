@@ -5,6 +5,7 @@ import Team from '../pages/TeamPage.vue'
 import User from '../pages/UserPage.vue'
 import Search from '../pages/SearchPage.vue'
 import UserEdit from '../pages/UserEditPage.vue'
+import UserResult from '../pages/UserResultPage.vue'
 import * as VueRouter from 'vue-router'
 
 
@@ -17,7 +18,8 @@ const routes = [
     { path: '/team', component: Team },
     {path:'/user',component: User},
     {path:'/search',component: Search},
-    {path:'/edit',component: UserEdit}
+    {path:'/edit',component: UserEdit},
+    {path:'/user/list',component: UserResult}
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置
