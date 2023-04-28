@@ -38,17 +38,7 @@ const active = ref('index');
 </script>
 
 <style scoped>
-.colon {
-  display: inline-block;
-  margin: 0 4px;
-  color: #1989fa;
-}
-.block {
-  display: inline-block;
-  width: 22px;
-  color: #fff;
-  font-size: 12px;
-  text-align: center;
-  background-color: #1989fa;
-}
+  #content {
+    padding-bottom: 50px;
+  }
 </style>

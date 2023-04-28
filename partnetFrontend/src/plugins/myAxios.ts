@@ -1,10 +1,12 @@
 import axios from "axios";
 
-axios.defaults.withCredentials = true;
+
 // Set config defaults when creating the instance
 const myAxios = axios.create({
     baseURL:"/app"
 });
+
+myAxios.defaults.withCredentials = true;
 
 
 

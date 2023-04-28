@@ -1,57 +1,11 @@
 <template>
   <van-form @submit="onSubmit">
-    <van-cell-group inset>
-      <van-field
-          v-if="editorUser.editKey === 'userName'"
-          v-model="userName"
-          name="昵称"
-          label="昵称"
-          placeholder="昵称"
-          :rules="[{ required: true, message: '请填写昵称' }]"
-      />
-      <van-field
-          v-if="editorUser.editKey === 'avatarUrl'"
-          v-model="avatarUrl"
-          name="头像"
-          label="头像"
-          placeholder="头像"
-          :rules="[{ required: true, message: '请上传头像' }]"
-      >
-        <template #input>
-          <van-uploader
-              :max-count="1"
-              v-model="fileList" multiple />
-        </template>
-
-      </van-field>
-
-      <van-field
-          v-if="editorUser.editKey === 'gender'"
-          v-model="gender"
-          is-link
-          readonly
-          name="picker"
-          label="性别"
-          placeholder="点击选择性别"
-          @click="showPicker = true"
-      />
-      <van-popup v-model:show="showPicker" position="bottom">
-        <van-picker
-            :columns="columns"
-            @confirm="onConfirm"
-            @cancel="showPicker = false"
-        />
-      </van-popup>
-      <van-field
-          v-if="editorUser.editKey === 'phone'"
-          v-model="phone"
-          type="phone"
-          name="电话"
-          label="电话"
-          placeholder="电话"
-          :rules="[{ required: true, message: '请填写电话' }]"
-      />
-    </van-cell-group>
+    <van-field
+        v-model="editorUser.currentValue"
+        :name="editorUser.editKey"
+        :label="editorUser.editName"
+        :placeholder="`请输入${editorUser.editName}`"
+    />
     <div style="margin: 16px;">
       <van-button round block type="primary" native-type="submit">
         提交
@@ -65,11 +19,9 @@
   import {ref} from 'vue';
   import {useRoute} from "vue-router";
   import {showFailToast, showSuccessToast, showToast} from "vant";
+  import router from "../router/index.ts";
+  import {getCurrentUser} from "../services/user.ts";
   const showPicker = ref(false);
-  const columns = [
-    { text: '男', value: 0 },
-    { text: '女', value: 1 },
-  ];
 
   const onConfirm = ({ selectedOptions }) => {
     gender.value = selectedOptions[0]?.text;
@@ -82,7 +34,8 @@
   const avatarUrl = ref('');
   const editorUser = ref({
     editKey : route.query.editKey,
-    currentValue:route.query.currentValue
+    editName:route.query.editName,
+    currentValue:route.query.currentValue,
   })
   const fileList = ref([
     {
@@ -90,15 +43,23 @@
     }
   ]);
   const onSubmit = async() => {
-    showToast('sadjfdjafk')
+    //获取用户信息
+    const currentUser =await getCurrentUser();
+    if(!currentUser){
+      showFailToast("用户未登录");
+      router.replace('/');
+      return;
+    }
+    debugger
     let obj = {
-      id:'1645710358315872258',
+      id:currentUser.id,
+      userRole:currentUser.userRole,
       [editorUser.value.editKey]:editorUser.value.currentValue
     }
    const res = await myAxios.post('/api/user/update',{...obj});
-   console.log(res,'更新请求');
-   if(res.data.code === 0 && res.data.data>0){
+   if(res.code === 0 && res.data>0){
      showSuccessToast('修改成功');
+     router.back();
    }else {
      showFailToast('修改失败');
    }

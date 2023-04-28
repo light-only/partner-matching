@@ -21,7 +21,7 @@ const routes = [
     {path:'/search',component: Search},
     {path:'/edit',component: UserEdit},
     {path:'/user/list',component: UserResult},
-    {path:'/login',component: UserLogin}
+    {path:'/login',component: UserLogin},
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置

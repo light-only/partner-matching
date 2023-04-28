@@ -7,7 +7,7 @@ import { VantResolver } from 'unplugin-vue-components/resolvers';
 export default defineConfig({
     server:{
         port:8082,
-        host:false,
+        host:true,
         proxy: {
             '/app': {
                 target: 'http://localhost:8081',

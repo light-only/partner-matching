@@ -15,7 +15,7 @@
          {{item}}
        </van-tag>
      </div>
-  <van-divider content-position="right">选择标签</van-divider>
+  <van-divider content-position="right" style="padding-bottom: 20px">选择标签</van-divider>
 
   <van-tree-select
       v-model:active-id="activeIds"
