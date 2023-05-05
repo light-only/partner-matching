@@ -7,6 +7,7 @@ import Search from '../pages/SearchPage.vue'
 import UserEdit from '../pages/UserEditPage.vue'
 import UserResult from '../pages/UserResultPage.vue'
 import UserLogin from '../pages/UserLoginPage.vue'
+import TeamAddPage from '../pages/TeamAddPage.vue'
 import * as VueRouter from 'vue-router'
 
 
@@ -22,6 +23,7 @@ const routes = [
     {path:'/edit',component: UserEdit},
     {path:'/user/list',component: UserResult},
     {path:'/login',component: UserLogin},
+    {path:'/team/add',component: TeamAddPage},
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置
