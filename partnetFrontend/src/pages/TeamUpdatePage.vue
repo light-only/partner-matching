@@ -28,11 +28,6 @@
         <van-popup v-model:show="showPicker" position="bottom">
           <van-date-picker @confirm="onConfirm" v-model="addTeamData.expireTime" @cancel="showPicker = false" />
         </van-popup>
-        <van-field name="stepper" label="最大人数">
-          <template #input>
-            <van-stepper v-model="addTeamData.maxNum" max="10" min="3"/>
-          </template>
-        </van-field>
         <van-field name="radio" label="队伍状态">
           <template #input>
             <van-radio-group v-model="addTeamData.status" direction="horizontal">
@@ -64,10 +59,14 @@
 <script setup>
 
 import router from "../router/index";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {showFailToast, showSuccessToast} from "vant";
 import myAxios from "../plugins/myAxios.ts";
 import {getCurrentUser} from "../services/user.ts";
+import {useRoute} from 'vue-router'
+import moment from "moment";
+
+const route = useRoute();
 
 
 const initFormData = {
@@ -87,28 +86,48 @@ const onConfirm = ({ selectedValues }) => {
   result.value = selectedValues.join('/');
   showPicker.value = false;
 };
-const minDate = new Date();
+const id = route.query.id;
+onMounted(async ()=>{
+  if(id <= 0){
+    showFailToast("队伍加载失败，请刷新");
+    return;
+  }
+  const res = await myAxios.get('api/team/get',{
+    params:{
+      id
+    }
+  });
+  if(res?.code === 0){
+    console.log(res.data,'++++')
+    addTeamData.value = res.data;
+    addTeamData.value.status = res.data.status.toString();
+    addTeamData.value.expireTime = moment(res.data.expireTime).format("yyyy-MM-DD").split('-');
+    result.value =res.data.expireTime.join('/');
+  }else {
+    showFailToast("加载队伍失败，请重试");
+  }
+})
 
 //提交
 const onSubmit = async () => {
   let obj = await getCurrentUser();
   const postData = {
     ...addTeamData.value,
-    // expireTime: addTeamData.value.expireTime.join('-'),
+    expireTime: addTeamData.value.expireTime.join('-'),
     status: Number(addTeamData.value.status),
     userId:obj.id
   }
   debugger
   //todo 前端数据校验
-  const res = await myAxios.post("api/team/add",postData);
+  const res = await myAxios.post("api/team/update",postData);
   if (res?.code === 0 && res.data){
-    showSuccessToast("添加成功");
+    showSuccessToast("更新成功");
     router.push({
       path:'/team',
       replace:true,
     });
   }else {
-    showFailToast("添加失败")
+    showFailToast("更新失败")
   }
 }
 

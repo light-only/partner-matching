@@ -33,7 +33,7 @@ import router from "../router";
 const onClickLeft = () => router.back();
 const onClickRight = () => router.push('/search');
 
-const onChange=(index)=>showToast(`标签${index}`);
+// const onChange=(index)=>showToast(`标签${index}`);
 const active = ref('index');
 </script>
 

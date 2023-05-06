@@ -1,4 +1,13 @@
 <template>
+  <form action="/">
+    <van-search
+        v-model="value"
+        show-action
+        placeholder="请输入搜索关键词"
+        @search="onSearch"
+        @cancel="onCancel"
+    />
+  </form>
   <team-card-list :teamList="teamList"></team-card-list>
   <van-button type="primary" @click="toAddPage">创建队伍</van-button>
 </template>
@@ -9,8 +18,15 @@ import router from '../router/index'
 import TeamCardList from "../components/TeamCardList.vue";
 import {onMounted} from "vue";
 import myAxios from "../plugins/myAxios.ts";
-import {showFailToast} from "vant";
+import {showFailToast, showToast} from "vant";
 
+const value = ref('');
+const onSearch =  (val) => {
+  getTeamList(val);
+}
+const onCancel = () => {
+  getTeamList();
+}
 const toAddPage = ()=>{
   router.push({
     path:'/team/add'
@@ -18,14 +34,23 @@ const toAddPage = ()=>{
 }
 
 const teamList = ref([]);
-onMounted(async ()=>{
-  const res = await myAxios.get('api/team/list');
+onMounted( ()=>{
+  getTeamList();
+})
+
+const getTeamList = async (val='')=>{
+  const res = await myAxios.get('api/team/list',{
+    params:{
+      searchText:val,
+      pageNum:1
+    }
+  });
   if(res?.code===0){
     teamList.value = res.data;
   }else {
     showFailToast("加载队伍失败，请刷新");
   }
-})
+}
 
 </script>
 

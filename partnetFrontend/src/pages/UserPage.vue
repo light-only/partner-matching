@@ -12,6 +12,8 @@
   <van-cell title="邮箱"  :value="user?.email" />
   <van-cell title="星球编号"  :value="user?.planetCode" />
   <van-cell title="注册时间"  :value="user?.createTime" />
+  <van-cell title="我创建的队伍"  is-link />
+  <van-cell title="我加入的队伍"  is-link  />
 
 </template>
 
@@ -21,6 +23,7 @@ import {onMounted, ref} from "vue";
 import myAxios from "../plugins/myAxios";
 import {showFailToast, showSuccessToast, showToast} from "vant";
 import {getCurrentUser} from "../services/user";
+import moment from "moment";
 
 const user = ref();
 const id = ref("");
@@ -28,7 +31,7 @@ onMounted(async ()=>{
   const res = await getCurrentUser();
   if(res){
     user.value = res;
-    user.value.createTime = new Date(res.createTime).toString();
+    user.value.createTime = moment(res.createTime).format("YYYY-MM-DD");
     showSuccessToast('获取用户信息成功');
   }else {
     showFailToast('获取用户信息失败');

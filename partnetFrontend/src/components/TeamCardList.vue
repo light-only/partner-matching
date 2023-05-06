@@ -20,22 +20,55 @@
       </div>
     </template>
     <template #footer>
-      <van-button size="mini" type="primary" @click="toAddPage">加入队伍</van-button>
+      <van-button  size="mini" type="primary" @click="joinTeam(item.id)">加入队伍</van-button>
+      <van-button v-if="item.userId == currentUser?.id" plain size="mini" type="primary" @click="updateTeam(item.id)">更新队伍</van-button>
     </template>
   </van-card>
 </template>
 
-<script setup>
-
+<script setup lang="ts">
+import {TeamType} from '../models/team'
 import moment from "moment";
+import {defineProps, onMounted, ref, withDefaults} from "vue";
+import {getCurrentUser} from "../services/user";
+import router from "../router";
+import myAxios from "../plugins/myAxios";
+import {showFailToast, showSuccessToast} from "vant";
 
+const currentUser = ref({});
 
-const props = defineProps({
-  teamList:{
-    type:Array,
-    default:[]
-  }
+onMounted(async ()=>{
+  currentUser.value = await getCurrentUser();
 })
+
+
+interface TeamCardListProps{
+  teamList:TeamType[]
+}
+const props = withDefaults(defineProps<TeamCardListProps>(),{
+  teamList:[] as TeamType[]
+})
+
+const joinTeam = async (id:number)=>{
+  const res = await myAxios.post('api/team/join',{
+    teamId:id
+  });
+  if(res?.code === 0){
+      showSuccessToast("加入成功");
+  }else {
+    showFailToast("加入失败" + (res.description ? `， ${res.description} `:''));
+  }
+
+}
+const updateTeam = (id)=>{
+  router.push({
+    path:'/team/update',
+    query:{
+      id
+    }
+  })
+
+}
 </script>
 
 <style>
