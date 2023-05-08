@@ -9,6 +9,8 @@ import UserResult from '../pages/UserResultPage.vue'
 import UserLogin from '../pages/UserLoginPage.vue'
 import TeamAddPage from '../pages/TeamAddPage.vue'
 import TeamUpdatePage from '../pages/TeamUpdatePage.vue'
+import TeamCreatePage from '../pages/TeamCreatePage.vue'
+import TeamJoinPage from '../pages/TeamJoinPage.vue'
 import * as VueRouter from 'vue-router'
 
 
@@ -26,6 +28,8 @@ const routes = [
     {path:'/login',component: UserLogin},
     {path:'/team/add',component: TeamAddPage},
     {path:'/team/update',component: TeamUpdatePage},
+    {path:'/team/create',component: TeamCreatePage},
+    {path:'/team/join',component: TeamJoinPage},
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置
@@ -33,7 +37,7 @@ const routes = [
 // 暂时保持简单
 const router = VueRouter.createRouter({
     // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
-    history: VueRouter.createWebHashHistory(),
+    history: VueRouter.createWebHistory(),
     routes, // `routes: routes` 的缩写
 })
 

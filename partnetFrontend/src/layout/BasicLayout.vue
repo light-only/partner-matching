@@ -1,13 +1,14 @@
 <template>
-
   <van-nav-bar
-      title="标题"
-      left-text="返回"
+      :title="title"
       right-text="按钮"
-      left-arrow
       @click-left="onClickLeft"
       @click-right="onClickRight"
   >
+    <template #left v-if="isShow">
+      <van-icon name="arrow-left" size="18"/>
+      <span style="color: #646cff">返回</span>
+    </template>
     <template #right>
       <van-icon name="search" size="18" />
     </template>
@@ -28,13 +29,36 @@
 
 <script setup lang="ts">
 import {ref} from 'vue'
-import {showToast} from "vant";
-import router from "../router";
+// import {useRouter} from "vue-router";
+import router from '../router/index'
+import routes from '../config/routes'
+const DEFAULT_TITLE = "伙伴匹配";
+const title = ref(DEFAULT_TITLE);
+const isShow = ref(true);
+
+const active = ref('index');
+/**
+ * 左侧返回按钮
+ */
 const onClickLeft = () => router.back();
+
+/**
+ * 右侧搜索按钮
+ */
 const onClickRight = () => router.push('/search');
 
-// const onChange=(index)=>showToast(`标签${index}`);
-const active = ref('index');
+router.beforeEach((to,from)=>{
+  const toPath = to.path;
+  if(toPath === '/'){
+    isShow.value = false;
+  }else {
+    isShow.value = true;
+  }
+  const route = routes.find((item)=>{
+    return toPath == item.path;
+  });
+  title.value = route?.title ?? DEFAULT_TITLE;
+})
 </script>
 
 <style scoped>

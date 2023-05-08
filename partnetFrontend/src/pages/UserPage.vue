@@ -12,8 +12,11 @@
   <van-cell title="邮箱"  :value="user?.email" />
   <van-cell title="星球编号"  :value="user?.planetCode" />
   <van-cell title="注册时间"  :value="user?.createTime" />
-  <van-cell title="我创建的队伍"  is-link />
-  <van-cell title="我加入的队伍"  is-link  />
+  <van-cell title="我创建的队伍"  is-link  to="/team/create"/>
+  <van-cell title="我加入的队伍"  is-link  to="team/join" />
+  <div class="layout-button">
+    <van-button  color="linear-gradient(to right, #ff6034, #ee0a24)" block @click="layoutUser">退出登录</van-button>
+  </div>
 
 </template>
 
@@ -28,18 +31,24 @@ import moment from "moment";
 const user = ref();
 const id = ref("");
 onMounted(async ()=>{
+  //获取用户信息
   const res = await getCurrentUser();
   if(res){
     user.value = res;
+    //格式化时间，使用moment插件
     user.value.createTime = moment(res.createTime).format("YYYY-MM-DD");
-    showSuccessToast('获取用户信息成功');
   }else {
     showFailToast('获取用户信息失败');
   }
 
 })
 
-
+/**
+ * 跳转到修改用户信息页面
+ * @param editKey
+ * @param editName
+ * @param currentValue
+ */
 const handleClick= (editKey:string,editName:string,currentValue:any)=>{
   router.push({
     path:'/edit',
@@ -51,8 +60,22 @@ const handleClick= (editKey:string,editName:string,currentValue:any)=>{
     }
   })
 }
+/**
+ * 退出登录
+ */
+const layoutUser = async () =>{
+  const res = await myAxios.post("api/user/logout");
+  if(res?.code === 0){
+    router.replace('/login');
+  }else {
+    showFailToast("退出失败，请刷新后重试");
+  }
+}
 </script>
 
-<style>
+<style scoped>
+.layout-button {
+  padding: 20px;
+}
 
 </style>

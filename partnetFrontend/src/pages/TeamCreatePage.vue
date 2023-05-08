@@ -8,12 +8,8 @@
         @cancel="onCancel"
     />
   </form>
-  <div class="layout-button">
-    <van-button  type="primary" block @click="toAddPage">
-      <van-icon name="plus" />
-      创建队伍</van-button>
-  </div>
   <team-card-list :teamList="teamList"></team-card-list>
+  <van-empty v-if="teamList.length<1" description="暂无数据" />
 
 </template>
 
@@ -44,7 +40,7 @@ onMounted( ()=>{
 })
 
 const getTeamList = async (val='')=>{
-  const res = await myAxios.get('api/team/list',{
+  const res = await myAxios.get('api/team/list/my/create',{
     params:{
       searchText:val,
       pageNum:1
@@ -59,9 +55,6 @@ const getTeamList = async (val='')=>{
 
 </script>
 
-<style scoped>
-.layout-button {
-  padding: 0 10px;
-}
+<style>
 
 </style>
