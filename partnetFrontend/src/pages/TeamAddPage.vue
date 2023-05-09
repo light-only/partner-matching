@@ -94,11 +94,10 @@ const onSubmit = async () => {
   let obj = await getCurrentUser();
   const postData = {
     ...addTeamData.value,
-    // expireTime: addTeamData.value.expireTime.join('-'),
+    expireTime: addTeamData.value.expireTime.join('-'),
     status: Number(addTeamData.value.status),
     userId:obj.id
   }
-  debugger
   //todo 前端数据校验
   const res = await myAxios.post("api/team/add",postData);
   if (res?.code === 0 && res.data){

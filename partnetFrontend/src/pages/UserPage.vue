@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import router from '../router/index'
-import {onMounted, ref} from "vue";
+import {onMounted, ref,onActivated,watch} from "vue";
 import myAxios from "../plugins/myAxios";
 import {showFailToast, showSuccessToast, showToast} from "vant";
 import {getCurrentUser} from "../services/user";
@@ -30,18 +30,32 @@ import moment from "moment";
 
 const user = ref();
 const id = ref("");
-onMounted(async ()=>{
-  //获取用户信息
-  const res = await getCurrentUser();
-  if(res){
-    user.value = res;
-    //格式化时间，使用moment插件
-    user.value.createTime = moment(res.createTime).format("YYYY-MM-DD");
-  }else {
-    showFailToast('获取用户信息失败');
-  }
-
+onMounted( ()=>{
+  // getUserInfo();
 })
+
+watch(()=>router.currentRoute.value,(newValue:any)=>{
+  if(newValue){
+    console.log(222)
+    getUserInfo();
+  }
+},{immediate:true})
+
+ function getUserInfo (){
+  //获取用户信息
+   getCurrentUser().then(res=>{
+     if(res){
+       user.value = res;
+       //格式化时间，使用moment插件
+       user.value.createTime = moment(res.createTime).format("YYYY-MM-DD");
+     }else {
+       showFailToast('获取用户信息失败');
+     }
+   })
+
+}
+
+// getUserInfo();
 
 /**
  * 跳转到修改用户信息页面

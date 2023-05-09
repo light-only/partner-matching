@@ -8,9 +8,8 @@
         @cancel="onCancel"
     />
   </form>
-  <team-card-list :teamList="teamList"></team-card-list>
+  <team-card-list :teamList="teamList" @getTeamList="getTeamList"></team-card-list>
   <van-empty v-if="teamList.length<1" description="暂无数据" />
-<!--  <van-button type="primary" @click="toAddPage">加入队伍</van-button>-->
 </template>
 
 <script setup>

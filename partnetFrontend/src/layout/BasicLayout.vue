@@ -18,7 +18,7 @@
    <router-view/>
   </div>
 
-  <van-tabbar v-model="active" @change="onChange">
+  <van-tabbar v-model="active" v-if="isShow1">
     <van-tabbar-item icon="home-o" name="index" to="/">首页</van-tabbar-item>
     <van-tabbar-item icon="search" name="team" to="/team">队伍</van-tabbar-item>
     <van-tabbar-item icon="friends-o" name="user" to="/user">个人</van-tabbar-item>
@@ -28,19 +28,40 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
-// import {useRouter} from "vue-router";
+import {ref, watch} from 'vue'
 import router from '../router/index'
 import routes from '../config/routes'
 const DEFAULT_TITLE = "伙伴匹配";
 const title = ref(DEFAULT_TITLE);
 const isShow = ref(true);
+const isShow1 = ref(true);
 
 const active = ref('index');
 /**
  * 左侧返回按钮
  */
 const onClickLeft = () => router.back();
+
+// 监听当前路由变化，选中对应的标签栏
+watch(
+    () => router.currentRoute.value,
+    (newValue: any) => {
+      if(newValue.path === '/'){
+        active.value = 'index';
+        isShow1.value = true;
+      }else if(newValue.path === '/team'){
+        active.value = 'team';
+        isShow1.value = true;
+      }else if(newValue.path === '/user'){
+        active.value = 'user';
+        isShow1.value = true;
+      }else {
+        newValue.value = false;
+        isShow1.value = false;
+      }
+    },
+    { immediate: true }
+)
 
 /**
  * 右侧搜索按钮

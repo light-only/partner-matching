@@ -10,7 +10,6 @@ export const getCurrentUser = async ()=>{
      if(currentUser){
          return currentUser;
      }
-
      //不存在就从远程获取
     const res = await myAxios.get('/api/user/currentUser');
      if(res?.code === 0){
