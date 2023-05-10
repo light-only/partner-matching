@@ -8,7 +8,11 @@
         :label="editorUser.editName"
         :placeholder="`请输入${editorUser.editName}`"
         @click="handleClick(editorUser.editKey)"
-    />
+    >
+      <template #input  v-if="editorUser.editKey === 'avatarUrl'">
+        <van-uploader v-model="imageValue" :max-count="1" />
+      </template>
+    </van-field>
     <van-popup v-model:show="showPicker" position="bottom">
       <van-picker
           :columns="columns"
@@ -37,12 +41,20 @@
     { text: '男', value: 0 },
     { text: '女', value: 1 },
   ];
-
-
+  const imageValue = ref();
+  /**
+   * 确认选择性别选择器
+   * @param selectedOptions
+   */
   const onConfirm = ({ selectedOptions }) => {
     editorUser.value.currentValue = selectedOptions[0]?.text;
     showPicker.value = false;
   };
+
+  /**
+   * 判断是否显示弹窗
+   * @param val
+   */
   const handleClick = (val) =>{
     if(val === 'gender'){
       showPicker.value = true;
@@ -58,13 +70,18 @@
   const editorUser = ref({
     editKey : route.query.editKey,
     editName:route.query.editName,
-    currentValue:route.query.editKey==='gender'?route.query.currentValue===1?"女":'男':route.query.currentValue,
+    currentValue:route.query.editKey==='gender'?route.query.currentValue==1?"女":'男':route.query.currentValue,
   })
   const fileList = ref([
     {
       url:'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
     }
   ]);
+
+  /**
+   * 提交表单
+   * @returns {Promise<void>}
+   */
   const onSubmit = async() => {
     //获取用户信息
     const currentUser =await getCurrentUser();
@@ -76,18 +93,18 @@
     let obj = {
       id:currentUser.id,
       userRole:currentUser.userRole,
-      [editorUser.value.editKey]:editorUser.value.currentValue
+      [editorUser.value.editKey]:editorUser.value.editKey==='gender'?editorUser.value.currentValue==='男'?0:1:editorUser.value.currentValue
     }
+    let user = await getCurrentUser();
     let user1 = {
-      ...obj,
-      currentUser:getCurrentUser()
+      ...user,
+      ...obj
     };
     setCurrentUserState(user1);
    const res = await myAxios.post('/api/user/update',{...obj});
-    console.log(res,'res+++');
    if(res.code === 0 && res.data>0){
      showSuccessToast('修改成功');
-     router.push('/user');
+     router.replace('/user');
    }else {
      showFailToast('修改失败');
    }

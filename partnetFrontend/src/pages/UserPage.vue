@@ -9,7 +9,7 @@
     <div v-if="user?.gender ===1">女</div>
   </van-cell>
   <van-cell title="电话" is-link :value="user?.phone" @click="handleClick('phone','电话',user?.phone)"/>
-  <van-cell title="邮箱"  :value="user?.email" />
+  <van-cell title="邮箱" is-link @click="handleClick('email','邮箱',user?.email)"  :value="user?.email" />
   <van-cell title="星球编号"  :value="user?.planetCode" />
   <van-cell title="注册时间"  :value="user?.createTime" />
   <van-cell title="我创建的队伍"  is-link  to="/team/create"/>
@@ -36,7 +36,6 @@ onMounted( ()=>{
 
 watch(()=>router.currentRoute.value,(newValue:any)=>{
   if(newValue){
-    console.log(222)
     getUserInfo();
   }
 },{immediate:true})

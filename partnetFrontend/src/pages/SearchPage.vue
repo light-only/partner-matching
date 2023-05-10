@@ -10,7 +10,7 @@
     </form>
   <van-divider content-position="left">已选标签</van-divider>
   <div v-if="activeIds.length===0" style="text-align: center">请选择标签!</div>
-     <div style="display: grid;grid-template-columns: repeat(4, 1fr);">
+     <div style="display: flex;width: 100%;flex-wrap: wrap;padding: 0 15px">
        <van-tag style="margin: 10px 5px" v-for="(item,index) in activeIds" :show="true" closeable size="medium" type="primary" @close="close(index)">
          {{item}}
        </van-tag>
@@ -78,6 +78,7 @@
     {
       text: '年级',
       children: [
+        { text: '高中', id: '高中' },
         { text: '大一', id: '大一' },
         { text: '大二', id: '大二' },
         { text: '大三', id: '大三' },

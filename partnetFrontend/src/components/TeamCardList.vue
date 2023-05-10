@@ -11,7 +11,7 @@
     </template>
     <template #bottom>
       <div>
-        {{'最大人数' +" : " + item.maxNum}}
+        {{'队伍人数' +" : " + item.hasJoinNum + '/' + item.maxNum}}
       </div>
       <div>
         {{'过期时间' + " : "+moment(item.expireTime).format("YYYY-MM-DD")}}
